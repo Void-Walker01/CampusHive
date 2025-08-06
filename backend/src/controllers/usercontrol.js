@@ -81,8 +81,20 @@ const login=asyncHandle(async(req,res)=>{
 
 });
 
+const currentUser=asyncHandle(async(req,res)=>{
+    res
+    .status(200)
+    .json(new ApiResponse(
+        200,
+        "Current user retrieved successfully",
+        req.user
+    )
+    )
+});
+
 export{
     signUp,
-    login
+    login,
+    currentUser,
 };
 
