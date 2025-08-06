@@ -41,7 +41,7 @@ const signUp=asyncHandle(async(req,res)=>{
         throw new ApiError(500,'User creation failed');
     }
 
-    res.status(201).json(
+    return res.status(201).json(
         new ApiResponse(200,"User registered successfully", createdUser)
     );
 });
@@ -82,7 +82,7 @@ const login=asyncHandle(async(req,res)=>{
 });
 
 const currentUser=asyncHandle(async(req,res)=>{
-    res
+    return res
     .status(200)
     .json(new ApiResponse(
         200,
