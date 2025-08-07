@@ -8,7 +8,7 @@ const verifyJWT=asyncHandle(async(req,res,next)=>{
         const token=req.cookies?.accessToken||req.headers?.authorization?.replace("Bearer ", "");
 
         if(!token){
-            throw new ApiError(401,"Unauthorized");
+            throw new ApiError(401,"Token Not Found");
         }
         const decoded=jwt.verify(token,process.env.ACCESS_JWT_SECRET);
         const user= await User.findById(decoded?._id).select("-password -refreshToken");
