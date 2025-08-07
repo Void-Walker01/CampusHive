@@ -14,7 +14,7 @@ const verifyJWT=asyncHandle(async(req,res,next)=>{
         const user= await User.findById(decoded?._id).select("-password -refreshToken");
 
         if(!user){
-            throw new ApiError(401,"Unauthorized");
+            throw new ApiError(401,"user not found");
         }
 
         req.user=user;
