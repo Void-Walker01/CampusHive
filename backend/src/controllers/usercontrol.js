@@ -92,9 +92,27 @@ const currentUser=asyncHandle(async(req,res)=>{
     )
 });
 
+const logout = asyncHandle(async (req, res) => {
+  // The user object is removed from the database in the auth middleware
+  // We just need to clear the cookies from the browser
+  
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, "User logged out successfully"));
+});
+
 export{
     signUp,
     login,
     currentUser,
+    logout
 };
 
