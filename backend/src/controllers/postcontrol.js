@@ -4,51 +4,60 @@ import ApiResponse from '../utils/apiRes.js';
 import Post from '../models/post.js';
 import uploadOnCloudinary from '../utils/cloudinary.js';
 
+const createPost = asyncHandle(async (req, res) => {
+  const { content } = req.body;
 
+  if (!content && !req.file) {
+    throw new ApiError(400, 'Post must have either content or an image');
+  }
 
-const createPost= asyncHandle(async(req,res)=>{
-    const {content}=req.body;
-
-    if(!content&&!req.file){
-        throw new ApiError(400,'Post must have either content or an image');
+  let imageUrl = null;
+  if (req.file) {
+    const result = await uploadOnCloudinary(req.file.path);
+    if (!result || !result.url) {
+      throw new ApiError(500, 'Failed to upload image');
     }
+    imageUrl = result.url;
+  }
 
-    let imageUrl=null;
-    if(req.file){
-        const result=await uploadOnCloudinary(req.file.path);
+  const post = await Post.create({
+    content,
+    image: imageUrl,
+    author: req.user._id
+  });
 
-        if(!result||!result.url){
-            throw new ApiError(500,'Failed to upload image');
-        }
-        imageUrl=result.url;
-    }
+  // --- THIS IS THE FIX ---
+  // Find the post we just created and populate the author field
+  const createdPost = await Post.findById(post._id).populate(
+    'author',
+    'firstName lastName profilePic' // Populate the fields you need
+  );
 
-    const newPost=await Post.create({
-        content,
-        image: imageUrl,
-        author: req.user._id
-    });
+  if (!createdPost) {
+    throw new ApiError(500, "Failed to create and retrieve post");
+  }
 
-    return res
+  return res
     .status(201)
     .json(new ApiResponse(
-        201,
-        'Post created successfully',
-        newPost
+      201,
+      createdPost, // Send the complete, populated post back
+      'Post created successfully'
     ));
 });
 
-const getAllPost=asyncHandle(async(req,res)=>{
-    const posts=await Post.find({})
-    .populate('author','firstName lastName admNo email')
-    .sort({createdAt:-1});
+const getAllPost = asyncHandle(async (req, res) => {
+  const posts = await Post.find({})
+    .populate('author', 'firstName lastName admNo email profilePic')
+    .sort({ createdAt: -1 });
 
-    return res
+  // Corrected ApiResponse call: (statusCode, data, message)
+  return res
     .status(200)
     .json(new ApiResponse(
-        200,
-        'All posts retrieved successfully',
-        posts
+      200,
+      posts, // Pass the posts array as the data
+      'All posts retrieved successfully'
     ));
 });
 
@@ -66,9 +75,10 @@ const deletePost = asyncHandle(async (req, res) => {
 
   await Post.findByIdAndDelete(postId);
 
+  // Corrected ApiResponse call: (statusCode, data, message)
   return res
     .status(200)
-    .json(new ApiResponse(200, 'Post deleted successfully'));
+    .json(new ApiResponse(200, {}, 'Post deleted successfully'));
 });
 
 export {
@@ -76,5 +86,3 @@ export {
   getAllPost,
   deletePost
 };
-
-
