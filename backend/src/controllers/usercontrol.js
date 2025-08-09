@@ -76,11 +76,18 @@ const login = asyncHandle(async (req, res) => {
         sameSite: 'strict'
     };
 
+    //fix for that unwanted error in console due to unwanted api calls
+     const flagCookieOptions = {
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    };
+
     // Corrected ApiResponse call: (statusCode, data, message)
     return res
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
+        .cookie("flag", true, flagCookieOptions)
         .json(new ApiResponse(200, loggedInUser, "User logged in successfully"));
 });
 

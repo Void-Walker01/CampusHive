@@ -1,5 +1,13 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
+// A simple helper function to get a cookie's value by its name.
+// This allows us to read the non-httpOnly 'isLoggedIn' flag
+const getCookie=(name)=>{
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -29,7 +37,13 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    checkUserStatus();
+    //fix for that unwanted api calls
+    if (getCookie('flag')){
+      checkUserStatus();
+    }else{
+      setLoading(false);
+      setCurrentUser(null);
+    }
   }, []);
 
   const value = {
