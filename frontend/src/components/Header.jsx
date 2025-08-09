@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { FiFeather, FiLogOut } from 'react-icons/fi';
+import { FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import logo from "../assets/logo.jpeg";
+import apiClient from '../api/axios';
 
 function Header() {
   const { currentUser, setCurrentUser } = useAuth();
@@ -10,10 +11,8 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/v1/user/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
+      // 2. Use the new apiClient
+      await apiClient.post('/user/logout');
       setCurrentUser(null);
       navigate('/login');
     } catch (error) {
@@ -29,7 +28,6 @@ function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/50 backdrop-blur-lg shadow-lg">
       <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-        {/* Logo always links to the landing page */}
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="Logo" className="w-8 h-8 object-contain" />
           <h1 className="text-xl font-bold text-white tracking-wider">
@@ -39,7 +37,6 @@ function Header() {
         <nav>
           <ul className="flex items-center gap-6">
             {currentUser ? (
-              // --- Logged-in user navigation ---
               <>
                 <li>
                   <NavLink
@@ -70,7 +67,6 @@ function Header() {
                 </li>
               </>
             ) : (
-              // --- Logged-out user navigation ---
               <>
                 <li>
                   <Link

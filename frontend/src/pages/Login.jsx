@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiLock } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
+import apiClient from '../api/axios'; 
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -25,22 +26,16 @@ function Login() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/v1/user/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-        // FINAL FIX: Added credentials: 'include'
-        credentials: 'include',
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message || 'Failed to login');
-      }
-      setCurrentUser(data.data);
+      // 2. Use the new apiClient
+      const response = await apiClient.post('/user/login', formData);
+      
+      // Axios puts the response data directly in `response.data`
+      setCurrentUser(response.data.data);
       setLoading(false);
       navigate('/feed');
     } catch (err) {
-      setError(err.message);
+      // Axios provides better error messages
+      setError(err.response?.data?.message || err.message || 'Failed to login');
       setLoading(false);
     }
   };

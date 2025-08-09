@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiMail, FiLock, FiBookOpen, FiGitBranch, FiAward, FiCamera } from 'react-icons/fi';
+import apiClient from '../api/axios';
 
 const InputField = ({ id, type, placeholder, icon, value, onChange }) => (
   <div className="relative">
@@ -70,18 +71,18 @@ function SignUp() {
     }
 
     try {
-      const res = await fetch('/api/v1/user/signup', {
-        method: 'POST',
-        body: submissionData,
+      // 2. Use the new apiClient
+      // For FormData, we need to specify the content type header
+      await apiClient.post('/user/signup', submissionData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
+
       setLoading(false);
       navigate('/login');
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message || 'Something went wrong');
       setLoading(false);
     }
   };

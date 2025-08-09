@@ -1,7 +1,8 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FiTrash2 } from 'react-icons/fi';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
+import apiClient from '../api/axios'; // 1. Import the new client
 
 function PostCard({ post, onDelete }) {
   const { currentUser } = useAuth();
@@ -11,17 +12,11 @@ function PostCard({ post, onDelete }) {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     
     try {
-      const res = await fetch(`/api/v1/posts/${post._id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to delete post');
-      }
+      // 2. Use the new apiClient
+      await apiClient.delete(`/posts/${post._id}`);
       onDelete(post._id);
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data?.message || error.message || 'Failed to delete post');
     }
   };
 
@@ -32,7 +27,6 @@ function PostCard({ post, onDelete }) {
   return (
     <div className="bg-gray-800/50 p-4 sm:p-6 rounded-lg border border-gray-700">
       <div className="flex items-center justify-between mb-4">
-        {/* Make the author details a clickable link to their profile */}
         <Link to={`/profile/${post.author._id}`} className="flex items-center gap-3">
           <img
             src={post.author.profilePic || `https://ui-avatars.com/api/?name=${post.author.firstName}+${post.author.lastName}&background=4f46e5&color=fff`}

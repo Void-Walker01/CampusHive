@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FiImage, FiSend } from 'react-icons/fi';
+import apiClient from '../api/axios'; // 1. Import the new client
 
 function CreatePost({ onPostCreated }) {
   const { currentUser } = useAuth();
@@ -35,19 +36,14 @@ function CreatePost({ onPostCreated }) {
     }
 
     try {
-      const res = await fetch('/api/v1/posts', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
+      // 2. Use the new apiClient
+      const response = await apiClient.post('/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message || 'Failed to create post');
-      }
-      
-      // The backend now sends the complete post object, so we can use it directly.
-      onPostCreated(data.data); 
+      onPostCreated(response.data.data); 
       
       setContent('');
       setImageFile(null);

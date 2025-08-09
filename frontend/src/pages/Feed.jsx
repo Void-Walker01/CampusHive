@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CreatePost from '../components/CreatePost';
 import PostCard from '../components/postCard';
 import { useAuth } from '../context/AuthContext';
+import apiClient from '../api/axios'; // 1. Import the new client
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -12,29 +13,21 @@ function Feed() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('/api/v1/posts', {
-          credentials: 'include',
-        });
-        const data = await res.json();
+        // 2. Use the new apiClient
+        const response = await apiClient.get('/posts');
+        const data = response.data;
 
-        // DEBUGGING: Log the received data to the console
         console.log("Data received from /api/v1/posts:", data);
 
-        if (!res.ok) {
-          throw new Error(data.message || 'Failed to fetch posts');
-        }
-
-        // SAFETY CHECK: Ensure the data is an array before setting it
         if (Array.isArray(data.data)) {
           setPosts(data.data);
         } else {
-          // If data.data is not an array, set posts to an empty array to prevent crash
           console.error("API did not return an array of posts. Received:", data.data);
           setPosts([]); 
         }
 
       } catch (err) {
-        setError(err.message);
+        setError(err.response?.data?.message || err.message || 'Failed to fetch posts');
       } finally {
         setLoading(false);
       }
@@ -62,7 +55,6 @@ function Feed() {
     <div className="container mx-auto max-w-2xl px-4 pt-24 pb-8">
       {currentUser && <CreatePost onPostCreated={handlePostCreated} />}
       <div className="space-y-6 mt-8">
-        {/* We can now safely map over `posts` because we ensure it's always an array */}
         {posts.length > 0 ? (
           posts.map(post => (
             <PostCard key={post._id} post={post} onDelete={handlePostDeleted} />
