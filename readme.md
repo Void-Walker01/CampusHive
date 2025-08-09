@@ -1,12 +1,12 @@
-# 💼 CampISM
+# 💼 CampusHive
 
-**CampISM** is a full-stack web application designed for **IIT (ISM) Dhanbad** to streamline and enhance campus activities such as student networking, event management, and club interactions.
+**CampusHive** is a full-stack web application designed for **IIT (ISM) Dhanbad** to streamline and enhance campus activities such as student networking, event management, and club interactions.
 
 ---
 
 ## 📁 Project Structure
 
-CampISM/
+CampusHive/
 ├── backend/ # Express + MongoDB (Node.js server)
 ├── frontend/ # (To be added: React frontend)
 └── README.md # Project overview
@@ -50,8 +50,8 @@ Copy code
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/CampISM.git
-cd CampISM/backend
+git clone https://github.com/YOUR_USERNAME/CampusHive.git
+cd CampusHive/backend
 2️⃣ Install dependencies
 bash
 Copy code
@@ -80,5 +80,4 @@ Uses nodemon for hot-reloading.
 🤝 Contribution
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-🧑‍💻 Maintained By
-Team CampISM
+🧑‍💻 Maintained By Me✌️
