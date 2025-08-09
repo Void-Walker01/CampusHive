@@ -40,7 +40,6 @@ const signUp = asyncHandle(async (req, res) => {
         throw new ApiError(500, 'User creation failed');
     }
 
-    // Corrected ApiResponse call: (statusCode, data, message)
     return res.status(201).json(
         new ApiResponse(201, createdUser, "User registered successfully")
     );
@@ -70,29 +69,30 @@ const login = asyncHandle(async (req, res) => {
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
+    // --- START OF FIX ---
+    // The options for setting cookies for cross-domain communication
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        secure: true, // Must be true for SameSite=None
+        sameSite: 'none' // Allows the cookie to be sent from Vercel to Render
+    };
+    // --- END OF FIX ---
+
+    // Note: The flagCookie is no longer needed with the apiClient setup, but we'll update it too.
+    const flagCookieOptions = {
+        secure: true,
+        sameSite: 'none'
     };
 
-    //fix for that unwanted error in console due to unwanted api calls
-     const flagCookieOptions = {
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
-    };
-
-    // Corrected ApiResponse call: (statusCode, data, message)
     return res
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .cookie("flag", true, flagCookieOptions)
+        .cookie("isLoggedIn", "true", flagCookieOptions) // Renamed from "flag" to match frontend
         .json(new ApiResponse(200, loggedInUser, "User logged in successfully"));
 });
 
 const currentUser = asyncHandle(async (req, res) => {
-    // Corrected ApiResponse call: (statusCode, data, message)
     return res
         .status(200)
         .json(new ApiResponse(
@@ -103,16 +103,25 @@ const currentUser = asyncHandle(async (req, res) => {
 });
 
 const logout = asyncHandle(async (req, res) => {
+    // --- START OF FIX ---
+    // The options must be identical to how they were set to clear them correctly
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        secure: true,
+        sameSite: 'none'
     };
+    
+    const flagCookieOptions = {
+        secure: true,
+        sameSite: 'none'
+    };
+    // --- END OF FIX ---
 
     return res
         .status(200)
         .clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)
+        .clearCookie("isLoggedIn", flagCookieOptions) // Clear the flag cookie too
         .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
