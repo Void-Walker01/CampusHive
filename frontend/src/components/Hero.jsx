@@ -5,13 +5,19 @@ function Hero() {
   return (
     <section className="text-white h-[calc(100vh-80px)] flex items-center justify-center text-center">
       <div className="mx-auto max-w-3xl px-4">
+        
+        {/* The main slogan is now on its own for maximum impact */}
         <h1 className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-4xl font-extrabold text-transparent sm:text-6xl">
           Connect. Share. Thrive.
-          <span className="sm:block mt-2"> Welcome to CampusHive. </span>
         </h1>
 
+        {/* "Welcome to CampusHive" is now a distinct subheading */}
+        <p className="mt-4 text-xl text-gray-200 sm:text-2xl">
+          Welcome to CampusHive
+        </p>
+
         <p className="mx-auto mt-6 max-w-xl sm:text-xl/relaxed text-gray-300">
-          The exclusive social hub for our campus. Share notes, organize events, and connect with peers like never before.
+          The exclusive digital hub for IIT (ISM) Dhanbad. Discover events, manage club activities, and connect with peers like never before.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -29,6 +35,14 @@ function Hero() {
             Learn More
           </a>
         </div>
+
+        {/* "Coming Soon" Section remains unchanged */}
+        <div className="mt-8">
+          <p className="text-l text-gray-400 transition-all hover:text-gray-200">
+            <span className="font-semibold text-blue-400">Coming soon:</span> Real-time Chat, Interactive Polls, Anonymous Feeds & more! ✨
+          </p>
+        </div>
+        
       </div>
     </section>
   );
