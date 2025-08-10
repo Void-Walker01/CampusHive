@@ -1,108 +1,149 @@
-🐝 CampusHive
+<div align="center">
+  <h1>🐝 CampusHive</h1>
+  <p><strong>Your Digital Campus Hub — Connecting Students, Clubs, and Events at IIT (ISM) Dhanbad.</strong></p>
+  <br />
+</div>
+
 <p align="center">
-<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
-<img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js">
-<img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
-<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
-<img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white" alt="Socket.io">
-<img src="https://img.shields.io/badge/status-in%20progress-blue?style=for-the-badge" alt="Status">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Badge">
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js Badge">
+  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js Badge">
+  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB Badge">
+  <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white" alt="Socket.io Badge">
+  <br>
+  <img src="https://img.shields.io/badge/status-in%20progress-blue?style=for-the-badge" alt="Project Status">
 </p>
 
-CampusHive is a full-stack web application designed exclusively for IIT (ISM) Dhanbad to create a vibrant, connected, and streamlined digital campus ecosystem. It enhances student networking, event management, and club interactions, bringing the entire campus community together on one platform.
+---
 
-✨ Features
-Our goal is to build a comprehensive platform. Here’s a look at what's complete, in progress, and planned for the future.
+## 📋 Table of Contents
 
-🔐 Core & Authentication (Backend Complete)
-Scalable Backend: Built with a robust and modular architecture using Node.js and Express.
+- [🎯 About The Project](#-about-the-project)
+- [✨ Key Features](#-key-features)
+- [🚀 Tech Stack](#-tech-stack)
+- [🏗️ Project Structure](#️-project-structure)
+- [🛠️ Getting Started](#️-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Backend Setup](#backend-setup)
+- [🤝 How to Contribute](#-how-to-contribute)
+- [📄 License](#-license)
+- [🧑‍💻 Contact](#-contact)
 
-Secure Authentication: JWT-based authentication to protect user data and sessions.
+---
 
-Role-Based Access Control: Differentiated permissions for Admin, Student, and Club Coordinator roles.
+## 🎯 About The Project
 
-Database: MongoDB with Mongoose ORM for flexible and powerful data modeling.
+**CampusHive** is a full-stack web application built to create a unified digital ecosystem for the students of IIT (ISM) Dhanbad. Our mission is to bridge the gap between students, campus clubs, and events by providing a single, intuitive platform. From real-time chat and interactive feeds to a centralized hub for all campus happenings, CampusHive is designed to be the ultimate one-stop-shop for campus life.
 
-💬 Community & Engagement (In Development)
-Real-time Chat: Instant messaging for one-on-one and group conversations using Socket.io.
+---
 
-Interactive Feeds: Users can post updates, with likes and comments to foster engagement.
+## ✨ Key Features
 
-Profile Discovery: Search for peers, view profiles, and build your network across batches and branches.
+The project is broken down into several key modules, each with a specific focus:
 
-Anonymous Confessions: A safe space for students to share thoughts and confessions anonymously.
+| Feature Category          | Description                                                                                              | Status             |
+| :------------------------ | :------------------------------------------------------------------------------------------------------- | :----------------- |
+| **🔐 Core & Authentication** | Scalable Node.js backend, secure JWT authentication,  | ✅ **Complete** |
+| **💬 Community Engagement** | Real-time chat, interactive feeds, profile discovery, anonymous confessions, and fun polls.             | 🚧 **In Progress** |
+| **🎉 Event & Club Hub** | A centralized dashboard for discovering events and clubs, plus media uploads for posters and images.      | 🛠️ **Upcoming** |
+| **📊 Admin & Analytics** | A powerful admin dashboard to manage users, monitor activity, and view platform analytics.                | 🛠️ **Upcoming** |
+| **🔔 Real-time Notifications** | Instant alerts for messages, event updates, and feed activity so you never miss a beat.                   | 🛠️ **Upcoming** |
 
-Fun Polls: Create and participate in polls on academic and extracurricular topics.
+---
 
-🎉 Event & Club Hub (Upcoming)
-Event & Club Discovery: A centralized dashboard to find upcoming events and join clubs, with smart filters.
+## 🚀 Tech Stack
 
-Media Uploads: Seamlessly upload event posters, profile pictures, and post images.
+This project is built with a modern, scalable MERN-based stack and other leading technologies.
 
-Real-time Notifications: Stay updated on event announcements, new messages, and friend requests.
+-   **Frontend:** React.js, Tailwind CSS, React Router, Axios
+-   **Backend:** Node.js, Express.js, Mongoose
+-   **Real-time Communication:** Socket.io
+-   **Database:** MongoDB
+-   **Authentication:** JSON Web Tokens (JWT)
+-   **Environment Management:** `dotenv`, `cors`
+---
 
-📊 Admin & Analytics (Upcoming)
-Admin Dashboard: A control panel for admins to manage users, monitor activity, and oversee platform health.
+## 🏗️ Project Structure
 
-🚀 Tech Stack
-Category	Technology
-🖥️ Frontend	React.js, Tailwind CSS, React Router, Axios
-⚙️ Backend	Node.js, Express.js, Mongoose, Socket.io, JSON Web Token (JWT), dotenv, CORS
-🗂️ Database	MongoDB
-☁️ Deployment	(To be decided - e.g., Vercel, Netlify, AWS)
+The repository is organized into a clean monorepo structure to keep the frontend and backend code separate and maintainable.
 
-Export to Sheets
-🏗️ Project Structure
+```bash
 CampusHive/
-├── backend/        # Deployed Express + MongoDB (Node.js server)
-├── frontend/       # Under Development (React.js frontend)
+├── backend/        # Express.js + MongoDB API Server
+├── frontend/       # React.js Client Application
 └── README.md       # You are here!
-📈 Project Status
-✅ Backend: The core backend API is built, tested, and deployed. It's ready to serve the frontend application.
+```
 
-🚧 Frontend: The React frontend is under active development. We are currently building the UI/UX for all the exciting features listed above.
+---
 
-🔗 Integration: Connecting the frontend with the backend API is the next major milestone.
+## 🛠️ Getting Started
 
-🛠️ Getting Started (Backend Setup)
-Clone the repository
+Follow these instructions to get the backend server up and running on your local machine for development and testing purposes.
 
-Bash
+### Prerequisites
 
-git clone https://github.com/YOUR_USERNAME/CampusHive.git
-cd CampusHive/backend
-Install dependencies
+Make sure you have the following software installed on your machine:
+* **Node.js** (v18.x or higher recommended)
+* **npm** (or yarn)
+* **MongoDB** (You can use a local instance or a free cloud instance from [MongoDB Atlas](https://www.mongodb.com/cloud/atlas))
 
-Bash
+### Backend Setup
 
-npm install
-Set up environment variables
-Create a .env file in the /backend directory and add the following:
+1.  **Clone the Repository**
+    ```bash
+    git clone [https://github.com/](https://github.com/)[YOUR_USERNAME]/CampusHive.git
+    cd CampusHive/backend
+    ```
 
-Ini, TOML
+2.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
 
-PORT=5000
-MONGO_URI=your-mongodb-uri
-JWT_SECRET=your-super-secret-key-for-jwt
-Run the development server
-This command uses nodemon for automatic server restarts on file changes.
+3.  **Set Up Environment Variables**
+    Create a `.env` file in the `/backend` directory and add the following configuration. **Do not** commit this file to version control.
+    ```env
+    # Server Port
+    PORT=5000
 
-Bash
+    # MongoDB Connection URI
+    MONGO_URI=your-mongodb-connection-string
 
-npm run dev
-The server will be running on http://localhost:5000.
+    # JWT Secret Key (use a long, random string)
+    JWT_SECRET=your-super-secret-key
+    ```
 
-🤝 Contribution
-Pull requests are welcome! This is a community-driven project, and your contributions are highly valued. For major changes, please open an issue first to discuss what you would like to change or add.
+4.  **Start the Development Server**
+    ```bash
+    npm run dev
+    ```
+    The server will start, and you should see a confirmation message in your terminal. By default, it runs at `http://localhost:5000` 🚀.
 
-Fork the Project
+---
 
-Create your Feature Branch (git checkout -b feature/AmazingFeature)
+## 🤝 How to Contribute
 
-Commit your Changes (git commit -m 'Add some AmazingFeature')
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-Push to the Branch (git push origin feature/AmazingFeature)
+To contribute:
+1.  **Fork** the Project.
+2.  Create your **Feature Branch** (`git checkout -b feature/AmazingFeature`).
+3.  **Commit** your Changes (`git commit -m 'Add some AmazingFeature'`).
+4.  **Push** to the Branch (`git push origin feature/AmazingFeature`).
+5.  Open a **Pull Request**.
 
-Open a Pull Request
+Please make sure your code adheres to the project's coding standards and includes tests where applicable.
 
-🧑‍💻 Maintained By
-Me ✌️
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information. (You'll need to add a `LICENSE.txt` file with the MIT License text).
+
+---
+
+## 🧑‍💻 Maintainer
+
+**[Rohit Guleria]** — Feel free to reach out!
+
+Project Link: [https://github.com/RohitGuleria/CampusHive](https://campus-hive-rho.vercel.app/)
