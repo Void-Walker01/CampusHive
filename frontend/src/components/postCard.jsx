@@ -1,18 +1,20 @@
+// src/components/postCard.jsx
+
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { FiTrash2 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
-import apiClient from '../api/axios'; // 1. Import the new client
+import { FiTrash2, FiEdit } from 'react-icons/fi';
+// We no longer need Link for the edit button
+import { Link } from 'react-router-dom'; 
+import apiClient from '../api/axios';
 
-function PostCard({ post, onDelete }) {
+// 1. Add 'onEdit' to the destructured props
+function PostCard({ post, onDelete, onEdit }) {
   const { currentUser } = useAuth();
   const isAuthor = currentUser && post.author && currentUser._id === post.author._id;
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
-    
     try {
-      // 2. Use the new apiClient
       await apiClient.delete(`/posts/${post._id}`);
       onDelete(post._id);
     } catch (error) {
@@ -41,9 +43,23 @@ function PostCard({ post, onDelete }) {
           </div>
         </Link>
         {isAuthor && (
-          <button onClick={handleDelete} className="text-gray-400 hover:text-red-500 p-2 rounded-full">
-            <FiTrash2 size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* 2. Change this from a <Link> to a <button> */}
+            <button 
+              onClick={() => onEdit(post)} // 3. Call the onEdit function with the post
+              className="text-gray-400 hover:text-indigo-400 p-2 rounded-full"
+              aria-label="Edit Post"
+            >
+              <FiEdit size={20} />
+            </button>
+            <button 
+              onClick={handleDelete} // Changed this to not pass ID, as it's in the closure
+              className="text-gray-400 hover:text-red-500 p-2 rounded-full"
+              aria-label="Delete Post"
+            >
+              <FiTrash2 size={20} />
+            </button>
+          </div>
         )}
       </div>
       {post.content && <p className="text-gray-200 mb-4 whitespace-pre-wrap">{post.content}</p>}

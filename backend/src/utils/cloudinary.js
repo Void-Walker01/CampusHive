@@ -20,4 +20,4 @@ const uploadOnCloudinary=async(localFilePath,folder='profilePics')=>{
     }
 }
 
-export default uploadOnCloudinary;
+export {uploadOnCloudinary,Cloudinary};

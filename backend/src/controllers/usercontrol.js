@@ -2,7 +2,7 @@ import asyncHandle from '../utils/asyncHandle.js';
 import ApiError from '../utils/apiError.js';
 import ApiResponse from '../utils/apiRes.js';
 import User from '../models/user.js';
-import uploadOnCloudinary from '../utils/cloudinary.js';
+import {uploadOnCloudinary,Cloudinary} from '../utils/cloudinary.js';
 import generateAccessAndRefreshTokens from '../utils/token.js';
 
 const signUp = asyncHandle(async (req, res) => {

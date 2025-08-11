@@ -13,7 +13,11 @@ const postSchema= new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true
-    }, 
+    },
+    imagePublicId:{
+        type:String,
+        default:''
+    } 
 },{timestamps:true});
 
 export default mongoose.model('Post',postSchema);

@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://campushive-xdaa.onrender.com', // Replace with your backend server URL
+        target: 'http://localhost:8000', // Replace with your backend server URL
         secure: false,
         changeOrigin: true,
       },
