@@ -3,31 +3,26 @@ import { FiX, FiSave, FiImage, FiTrash2 } from 'react-icons/fi';
 import apiClient from '../api/axios';
 
 function UpdatePost({ post, onUpdate, onClose }) {
-  // --- STATE MANAGEMENT ---
-  // We now manage content, the new image file, and the preview URL
   const [content, setContent] = useState('');
   const [imageFile, setImageFile] = useState(null);
-  const [preview, setPreview] = useState(null); // URL for image preview
+  const [preview, setPreview] = useState(null); 
   const [loading, setLoading] = useState(false);
-  const imageInputRef = useRef(null); // To trigger the file input
+  const imageInputRef = useRef(null);
 
-  // --- DATA INITIALIZATION ---
-  // This hook now sets the initial content AND the initial image preview
+  
   useEffect(() => {
     if (post) {
       setContent(post.content || '');
-      setPreview(post.image || null); // Use existing post image for preview
-      setImageFile(null); // Reset any selected file
+      setPreview(post.image || null);
+      setImageFile(null); 
     }
   }, [post]);
 
-  // --- IMAGE HANDLING ---
-  // This is the same logic from your CreatePost component
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
-      setPreview(URL.createObjectURL(file)); // Create a temporary URL for the new image
+      setPreview(URL.createObjectURL(file)); 
     }
   };
   
@@ -36,31 +31,28 @@ function UpdatePost({ post, onUpdate, onClose }) {
     setPreview(null);
   }
 
-  // --- FORM SUBMISSION ---
-  // This now uses FormData to handle both text and a potential file upload
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!content && !preview) return;
 
     setLoading(true);
 
-    // Use FormData because we might be sending a file
+    
     const formData = new FormData();
     formData.append('content', content);
     
-    // IMPORTANT: Only append the image if a NEW file has been selected
     if (imageFile) {
       formData.append('image', imageFile);
     }
     // If the user wants to remove the image, we can send a special signal
     // This depends on your backend API design. A common way is to send an empty value.
     else if (!preview && post.image) {
-        formData.append('image', ''); // Signal to backend to remove the image
+        formData.append('image', '');
     }
 
 
     try {
-      // Make a PATCH request with the FormData
       const response = await apiClient.patch(`/posts/${post._id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
