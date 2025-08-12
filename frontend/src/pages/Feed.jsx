@@ -1,9 +1,7 @@
-// src/pages/Feed.jsx
-
 import React, { useEffect, useState } from 'react';
 import CreatePost from '../components/CreatePost';
 import PostCard from '../components/postCard';
-import UpdatePost from '../components/UpdatePost'; // 1. Import the new component
+import UpdatePost from '../components/UpdatePost'; 
 import { useAuth } from '../context/AuthContext';
 import apiClient from '../api/axios';
 
@@ -12,8 +10,6 @@ function Feed() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { currentUser } = useAuth();
-
-  // 2. Add state to manage the edit modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [postToEdit, setPostToEdit] = useState(null);
 
@@ -45,13 +41,10 @@ function Feed() {
     setPosts(posts.filter(post => post._id !== deletedPostId));
   };
 
-  // 3. Add a handler to update a post in the list
   const handlePostUpdated = (updatedPost) => {
     setPosts(posts.map(post => (post._id === updatedPost._id ? updatedPost : post)));
-    // We don't need to close the modal here, the UpdatePost component does it.
   };
 
-  // 4. Functions to control the modal
   const handleOpenEditModal = (post) => {
     setPostToEdit(post);
     setIsEditModalOpen(true);
@@ -75,7 +68,7 @@ function Feed() {
               key={post._id} 
               post={post} 
               onDelete={handlePostDeleted} 
-              onEdit={handleOpenEditModal} // 5. Pass the open modal function
+              onEdit={handleOpenEditModal}
             />
           ))
         ) : (
@@ -85,8 +78,7 @@ function Feed() {
           </div>
         )}
       </div>
-
-      {/* 6. Conditionally render the modal */}
+      
       {isEditModalOpen && (
         <UpdatePost 
           post={postToEdit}

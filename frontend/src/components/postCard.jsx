@@ -1,13 +1,9 @@
-// src/components/postCard.jsx
-
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FiTrash2, FiEdit } from 'react-icons/fi';
-// We no longer need Link for the edit button
 import { Link } from 'react-router-dom'; 
 import apiClient from '../api/axios';
 
-// 1. Add 'onEdit' to the destructured props
 function PostCard({ post, onDelete, onEdit }) {
   const { currentUser } = useAuth();
   const isAuthor = currentUser && post.author && currentUser._id === post.author._id;
@@ -44,9 +40,8 @@ function PostCard({ post, onDelete, onEdit }) {
         </Link>
         {isAuthor && (
           <div className="flex items-center gap-2">
-            {/* 2. Change this from a <Link> to a <button> */}
             <button 
-              onClick={() => onEdit(post)} // 3. Call the onEdit function with the post
+              onClick={() => onEdit(post)}
               className="text-gray-400 hover:text-indigo-400 p-2 rounded-full"
               aria-label="Edit Post"
             >
