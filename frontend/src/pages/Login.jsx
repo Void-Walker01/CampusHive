@@ -26,15 +26,12 @@ function Login() {
     setLoading(true);
     setError(null);
     try {
-      // 2. Use the new apiClient
       const response = await apiClient.post('/user/login', formData);
       
-      // Axios puts the response data directly in `response.data`
       setCurrentUser(response.data.data);
       setLoading(false);
       navigate('/feed');
     } catch (err) {
-      // Axios provides better error messages
       setError(err.response?.data?.message || err.message || 'Failed to login');
       setLoading(false);
     }

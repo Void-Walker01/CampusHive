@@ -69,14 +69,14 @@ const login = asyncHandle(async (req, res) => {
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
-    // --- START OF FIX ---
+    
     // The options for setting cookies for cross-domain communication
     const options = {
         httpOnly: true,
-        secure: true, // Must be true for SameSite=None
+        secure: true, 
         sameSite: 'none' // Allows the cookie to be sent from Vercel to Render
     };
-    // --- END OF FIX ---
+    
 
     // Note: The flagCookie is no longer needed with the apiClient setup, but we'll update it too.
     const flagCookieOptions = {
@@ -88,7 +88,7 @@ const login = asyncHandle(async (req, res) => {
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .cookie("isLoggedIn", "true", flagCookieOptions) // Renamed from "flag" to match frontend
+        .cookie("isLoggedIn", "true", flagCookieOptions) 
         .json(new ApiResponse(200, loggedInUser, "User logged in successfully"));
 });
 
@@ -125,9 +125,27 @@ const logout = asyncHandle(async (req, res) => {
         .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
+const userProfile=asyncHandle(async(req,res)=>{
+    const {id}=req.params;
+    const user=await User.findById(id).select('-password');
+
+    if(!user){
+        throw new ApiError (404,"User not found");
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(
+        200,
+        user,
+        "User profile retrieved successfully"
+    ));
+});
+
 export {
     signUp,
     login,
     currentUser,
-    logout
+    logout,
+    userProfile
 };

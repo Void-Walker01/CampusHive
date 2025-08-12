@@ -48,7 +48,7 @@ function PostCard({ post, onDelete, onEdit }) {
               <FiEdit size={20} />
             </button>
             <button 
-              onClick={handleDelete} // Changed this to not pass ID, as it's in the closure
+              onClick={handleDelete}
               className="text-gray-400 hover:text-red-500 p-2 rounded-full"
               aria-label="Delete Post"
             >

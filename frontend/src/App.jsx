@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp';
 import Feed from './pages/Feed';
 import ProtectedRoute from './components/ProtectedRoute';
 import apiClient from './api/axios';
+import UserProfile from './pages/UserProfile';
 
 function App() {
 
@@ -36,7 +37,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/feed" element={<Feed />} />
-            {/* Add other protected routes here */}
+            <Route path="/profile/:id" element={<UserProfile/>}/>
           </Route>
         </Routes>
       </main>
