@@ -88,8 +88,11 @@ const deletePost = asyncHandle(async (req, res) => {
         .json(new ApiResponse(200, {}, 'Post deleted successfully'));
 });
 
+
 const updatePost = asyncHandle(async (req, res) => {
     const { id: postId } = req.params;
+    const { content, image } = req.body; // <-- Get image from body
+
     const post = await Post.findById(postId);
     if (!post) {
         throw new ApiError(404, 'Post not found');
@@ -98,47 +101,43 @@ const updatePost = asyncHandle(async (req, res) => {
         throw new ApiError(403, 'You are not authorized to update this post');
     }
 
-    const { content } = req.body;
-    let updatedPost;
-
-    if (req.file) {
+    let updatedData = { content };
+    
+    if (req.file){
         if (post.imagePublicId) {
             try {
                 await Cloudinary.uploader.destroy(post.imagePublicId);
             } catch (e) {
-                console.error("unable to delete form cloudinary", e);
+                console.error("Failed to delete old image from Cloudinary", e);
             }
         }
 
         const result = await uploadOnCloudinary(req.file.path);
-        if (!result || !result.url || !result.public_id) {
-            throw new ApiError(500, 'Failed to upload image to cloudinary');
+        if (!result || !result.url) {
+            throw new ApiError(500, 'Failed to upload new image');
         }
-
-        updatedPost = await Post.findByIdAndUpdate(
-            postId,
-            {
-                imagePublicId: result.public_id,
-                image: result.url,
-                content: content,
-            },
-            { new: true }
-        );
-    } else {
-        updatedPost = await Post.findByIdAndUpdate(
-            postId,
-            {
-                content: content,
-            },
-            { new: true }
-        );
+        updatedData.image = result.url;
+        updatedData.imagePublicId = result.public_id;
+    } 
+    else if (image === '' && post.imagePublicId) {
+        try {
+            await Cloudinary.uploader.destroy(post.imagePublicId);
+        } catch (e) {
+            console.error("Failed to delete image from Cloudinary", e);
+        }
+        updatedData.image = null;
+        updatedData.imagePublicId = null;
     }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+        postId,
+        { $set: updatedData },
+        { new: true }
+    ).populate('author', 'firstName lastName profilePic');
 
     if (!updatedPost) {
         throw new ApiError(500, 'Failed to update post');
     }
-
-    await updatedPost.populate('author', 'firstName lastName profilePic');
 
     return res
         .status(200)
@@ -149,9 +148,51 @@ const updatePost = asyncHandle(async (req, res) => {
         ));
 });
 
+const likeUnlikePost = asyncHandle(async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user._id;
+
+    const post = await Post.findById(id);
+    if (!post) {
+        throw new ApiError(404, 'Post not found');
+    }
+
+    const isLiked = post.likes.includes(userId);
+    let updatedPost;
+
+    if (isLiked) {
+        updatedPost = await Post.findByIdAndUpdate(
+            id,
+            { $pull: { likes: userId } },
+            { new: true }
+        );
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                updatedPost,
+                'Post unliked successfully',
+            ));
+    } else {
+        updatedPost = await Post.findByIdAndUpdate(
+            id,
+            { $push: { likes: userId } },
+            { new: true }
+        );
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                updatedPost,
+                'Post liked successfully',
+            ));
+    }
+});
+
 export {
     createPost,
     getAllPost,
     deletePost,
-    updatePost
+    updatePost,
+    likeUnlikePost
 };

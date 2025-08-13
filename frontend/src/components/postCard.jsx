@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { FiTrash2, FiEdit } from 'react-icons/fi';
+import { FiTrash2, FiEdit, FiHeart } from 'react-icons/fi'; 
 import { Link } from 'react-router-dom'; 
 import apiClient from '../api/axios';
 
 function PostCard({ post, onDelete, onEdit }) {
   const { currentUser } = useAuth();
   const isAuthor = currentUser && post.author && currentUser._id === post.author._id;
+
+  const [likes, setLikes] = useState(post.likes || []);
+
+  const [isLiked, setIsLiked] = useState(() => {
+    if (!currentUser) return false;
+    return (post.likes || []).includes(currentUser._id);
+  });
+
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
@@ -15,6 +23,33 @@ function PostCard({ post, onDelete, onEdit }) {
       onDelete(post._id);
     } catch (error) {
       console.error(error.response?.data?.message || error.message || 'Failed to delete post');
+    }
+  };
+
+
+  const handleLike = async () => {
+    if (!currentUser) {
+      console.log("You must be logged in to like a post.");
+      return; 
+    }
+
+    
+    const originalLikes = [...likes];
+    const newIsLiked = !isLiked;
+    
+    setIsLiked(newIsLiked);
+    if (newIsLiked) {
+      setLikes([...likes, currentUser._id]);
+    } else {
+      setLikes(likes.filter(id => id !== currentUser._id));
+    }
+
+    try {
+      await apiClient.put(`/posts/${post._id}/like`);
+    } catch (error) {
+      console.error("Failed to update like status:", error);
+      setLikes(originalLikes);
+      setIsLiked(!newIsLiked);
     }
   };
 
@@ -59,10 +94,23 @@ function PostCard({ post, onDelete, onEdit }) {
       </div>
       {post.content && <p className="text-gray-200 mb-4 whitespace-pre-wrap">{post.content}</p>}
       {post.image && (
-        <div className="rounded-lg overflow-hidden">
+        <div className="rounded-lg overflow-hidden mb-4">
           <img src={post.image} alt="post content" className="w-full h-auto object-cover" />
         </div>
       )}
+      <div className="pt-4 border-t border-gray-700 flex items-center gap-4">
+        <button 
+          onClick={handleLike} 
+          className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors"
+          aria-label="Like post"
+        >
+          <FiHeart 
+            size={20} 
+            className={isLiked ? "text-red-500 fill-current" : ""} 
+          />
+          <span className="font-semibold text-base">{likes.length}</span>
+        </button>
+      </div>
     </div>
   );
 }

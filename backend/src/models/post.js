@@ -17,7 +17,12 @@ const postSchema= new mongoose.Schema({
     imagePublicId:{
         type:String,
         default:''
-    } 
+    },
+    likes:{
+        type:[mongoose.Schema.Types.ObjectId],
+        ref:'User',
+        default:[]
+    }
 },{timestamps:true});
 
 export default mongoose.model('Post',postSchema);
