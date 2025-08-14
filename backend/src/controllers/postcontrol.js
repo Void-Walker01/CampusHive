@@ -15,10 +15,10 @@ const createPost = asyncHandle(async (req, res) => {
     let imageId = '';
     if (req.file) {
         const result = await uploadOnCloudinary(req.file.path);
-        if (!result || !result.url) {
+        if (!result || !result.secure_url) {
             throw new ApiError(500, 'Failed to upload image');
         }
-        imageUrl = result.url;
+        imageUrl = result.secure_url;
         imageId = result.public_id;
     }
 
@@ -91,7 +91,7 @@ const deletePost = asyncHandle(async (req, res) => {
 
 const updatePost = asyncHandle(async (req, res) => {
     const { id: postId } = req.params;
-    const { content, image } = req.body; // <-- Get image from body
+    const { content, image } = req.body;
 
     const post = await Post.findById(postId);
     if (!post) {
@@ -113,10 +113,10 @@ const updatePost = asyncHandle(async (req, res) => {
         }
 
         const result = await uploadOnCloudinary(req.file.path);
-        if (!result || !result.url) {
+        if (!result || !result.secure_url) {
             throw new ApiError(500, 'Failed to upload new image');
         }
-        updatedData.image = result.url;
+        updatedData.image = result.secure_url;
         updatedData.imagePublicId = result.public_id;
     } 
     else if (image === '' && post.imagePublicId) {
