@@ -3,11 +3,9 @@ import apiClient from '../api/axios';
 
 const AuthContext = createContext();
 
-
 export const useAuth = () => {
   return useContext(AuthContext);
 };
-
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -16,16 +14,24 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkUserStatus = async () => {
       try {
-        // Use apiClient to check the session, it will handle cookies automatically
+        // 🔑 Check if refresh token exists (cookie or localStorage)
+        const hasRefresh = document.cookie.includes("refreshToken"); 
+
+        if (!hasRefresh) {
+          setCurrentUser(null);
+          return;
+        }
+
+        // Only call backend if refresh token is present
         const response = await apiClient.get('/user/currentuser');
         setCurrentUser(response.data.data);
       } catch (error) {
-        // If the request fails (e.g., 401), it means no valid session
         setCurrentUser(null);
       } finally {
         setLoading(false);
       }
     };
+
     checkUserStatus();
   }, []); 
 
@@ -40,7 +46,6 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
-  // The value provided to the rest of the app
   const value = {
     currentUser,
     loading,
@@ -50,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {/* Don't render children until the initial loading check is complete */}
+      {/* Don’t render children until initial check is complete */}
       {!loading && children}
     </AuthContext.Provider>
   );

@@ -15,7 +15,7 @@ function App() {
   useEffect(()=>{
     const wakeUpServer=async ()=>{
       try{
-        console.log('pinginf backend to wake it up');
+        console.log('pinging backend to wake it up');
         await apiClient.get('/health');
       }catch(e){
         console.log('finished pinging backend');

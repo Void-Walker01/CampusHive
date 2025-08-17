@@ -22,7 +22,6 @@ apiClient.interceptors.response.use(
         // ^ replace with your own way of checking if a refresh token exists (cookie/localStorage)
 
         if (!hasRefresh) {
-          console.warn("No refresh token, user is logged out.");
           return Promise.reject(error);
         }
 
