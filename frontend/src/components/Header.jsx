@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { FiLogOut, FiMenu, FiX } from 'react-icons/fi'; // Import Menu and X icons
+import { FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import logo from "../assets/logo.jpeg";
-import apiClient from '../api/axios';
 
-function Header() {
-  const { currentUser, setCurrentUser } = useAuth();
+function Header(){
+  const { currentUser, logout } = useAuth();
+
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
-      await apiClient.post('/user/logout');
-      setCurrentUser(null);
-      setIsMenuOpen(false); // Close menu on logout
+      await logout();
+      setIsMenuOpen(false);
       navigate('/login');
     } catch (error) {
       console.error('Logout failed', error);
@@ -26,7 +25,6 @@ function Header() {
     fontWeight: 'bold',
   };
 
-  // Close menu when a link is clicked
   const handleLinkClick = () => {
     setIsMenuOpen(false);
   };
@@ -42,7 +40,7 @@ function Header() {
           </h1>
         </Link>
 
-        {/* Desktop Navigation (hidden on small screens) */}
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {currentUser ? (
             <>
@@ -60,15 +58,13 @@ function Header() {
           )}
         </nav>
 
-        {/* Mobile Menu Button (Hamburger Icon) */}
         <div className="md:hidden">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white focus:outline-none">
             {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu (Dropdown) */}
+      
       {isMenuOpen && (
         <div className="md:hidden bg-gray-900/80 backdrop-blur-xl absolute top-full left-0 w-full">
           <nav className="flex flex-col items-center gap-4 py-6">

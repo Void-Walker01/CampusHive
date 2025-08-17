@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiMail, FiLock, FiBookOpen, FiGitBranch, FiAward, FiCamera } from 'react-icons/fi';
 import apiClient from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 const InputField = ({ id, type, placeholder, icon, value, onChange }) => (
   <div className="relative">
@@ -36,6 +37,7 @@ function SignUp() {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  const { login } = useAuth(); // Get the login function from our context
 
   useEffect(() => {
     if (imageFile) {
@@ -71,16 +73,18 @@ function SignUp() {
     }
 
     try {
-      // 2. Use the new apiClient
-      // For FormData, we need to specify the content type header
+      // Step 1: Create the user account
       await apiClient.post('/user/signup', submissionData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      await login({
+        emailOrAdmNo: formData.email,
+        password: formData.password
       });
 
       setLoading(false);
-      navigate('/login');
+      navigate('/feed'); // Navigate to the main feed after successful login
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Something went wrong');
       setLoading(false);

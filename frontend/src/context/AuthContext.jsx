@@ -1,17 +1,13 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-
-
-const getCookie=(name)=>{
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
+import apiClient from '../api/axios';
 
 const AuthContext = createContext();
+
 
 export const useAuth = () => {
   return useContext(AuthContext);
 };
+
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -20,40 +16,42 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkUserStatus = async () => {
       try {
-        const res = await fetch('/api/v1/user/currentuser', {
-          credentials: 'include',
-        }); 
-        if (res.ok) {
-          const data = await res.json();
-          setCurrentUser(data.data);
-        } else {
-          setCurrentUser(null);
-        }
+        // Use apiClient to check the session, it will handle cookies automatically
+        const response = await apiClient.get('/user/currentuser');
+        setCurrentUser(response.data.data);
       } catch (error) {
-        console.error("Could not fetch user status", error);
+        // If the request fails (e.g., 401), it means no valid session
         setCurrentUser(null);
       } finally {
         setLoading(false);
       }
     };
-    if (getCookie('flag')){
-      checkUserStatus();
-    }else{
-      setLoading(false);
-      setCurrentUser(null);
-    }
-  }, []);
+    checkUserStatus();
+  }, []); 
 
+  const login = async (credentials) => {
+    const response = await apiClient.post('/user/login', credentials);
+    setCurrentUser(response.data.data);
+    return response;
+  };
+
+  const logout = async () => {
+    await apiClient.post('/user/logout');
+    setCurrentUser(null);
+  };
+
+  // The value provided to the rest of the app
   const value = {
     currentUser,
-    setCurrentUser,
     loading,
+    login, 
+    logout,  
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {/* We render children immediately, but ProtectedRoute will handle the loading state */}
-      {children}
+      {/* Don't render children until the initial loading check is complete */}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

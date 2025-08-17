@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiLock } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
-import apiClient from '../api/axios'; 
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -11,7 +10,8 @@ function Login() {
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { setCurrentUser } = useAuth();
+  const { login } = useAuth();
+  
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,9 +26,8 @@ function Login() {
     setLoading(true);
     setError(null);
     try {
-      const response = await apiClient.post('/user/login', formData);
-      
-      setCurrentUser(response.data.data);
+      await login(formData);
+    
       setLoading(false);
       navigate('/feed');
     } catch (err) {
