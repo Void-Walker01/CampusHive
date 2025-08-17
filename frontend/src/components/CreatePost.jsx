@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FiImage, FiSend } from 'react-icons/fi';
-import apiClient from '../api/axios'; // 1. Import the new client
+import apiClient from '../api/axios';
 
 function CreatePost({ onPostCreated }) {
   const { currentUser } = useAuth();

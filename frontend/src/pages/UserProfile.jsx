@@ -37,7 +37,7 @@ const UserProfile = () => {
 
         <div className="px-8 pb-8 text-center">
           <img 
-            src={user.profilePic || 'https://via.placeholder.com/150'} 
+            src={user.profilePic || `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=0D8ABC&color=fff&size=150`} 
             alt={`${user.firstName}'s profile`} 
             className="w-40 h-40 rounded-full border-4 border-gray-800 mx-auto -mt-24 object-cover"
           />

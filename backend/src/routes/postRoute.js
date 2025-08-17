@@ -1,5 +1,6 @@
 import express from 'express';
 import { createPost, getAllPost, deletePost, updatePost,likeUnlikePost } from '../controllers/postcontrol.js';
+import { addComment, getComment } from '../controllers/commentControl.js';
 import verifyJWT from '../middlewares/authmiddle.js';
 import upload from '../middlewares/multer.js';
 
@@ -10,6 +11,8 @@ router.get('/', verifyJWT, getAllPost);
 router.delete('/:id', verifyJWT, deletePost);
 router.patch('/:id', verifyJWT, upload.single('image'), updatePost);
 router.put('/:id/like',verifyJWT,likeUnlikePost);
+router.post('/:id/comments',verifyJWT,addComment);
+router.get('/:id/comments',verifyJWT,getComment);
 
 
 export default router;

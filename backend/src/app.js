@@ -25,9 +25,11 @@ app.get('/api/v1/health',(req,res)=>{
 
 import userRoutes from './routes/userRoute.js';
 import postRoutes from './routes/postRoute.js';
+import commentRoutes from './routes/commentRoute.js';
 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/comments', commentRoutes);
 app.use(errorHandler);
 
 

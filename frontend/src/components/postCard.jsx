@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { FiTrash2, FiEdit, FiHeart } from 'react-icons/fi'; 
 import { Link } from 'react-router-dom'; 
 import apiClient from '../api/axios';
+import Comment from './Comment';
 
 function PostCard({ post, onDelete, onEdit }) {
   const { currentUser } = useAuth();
@@ -110,6 +111,9 @@ function PostCard({ post, onDelete, onEdit }) {
           />
           <span className="font-semibold text-base">{likes.length}</span>
         </button>
+      </div>
+      <div className="pt-4 border-t border-gray-700">
+        <Comment postId={post._id} currentUser={currentUser} />
       </div>
     </div>
   );
