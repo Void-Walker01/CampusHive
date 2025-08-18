@@ -9,6 +9,8 @@ import Feed from './pages/Feed';
 import ProtectedRoute from './components/ProtectedRoute';
 import apiClient from './api/axios';
 import UserProfile from './pages/UserProfile';
+import CheckEmail from './pages/CheckEmail';
+import VerifyEmail from './pages/VerifyEmail';
 
 function App() {
 
@@ -33,8 +35,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/check-your-email" element={<CheckEmail/>}/>
+          <Route path="/verify-email/:token" element={<VerifyEmail/>} />
 
-          {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/feed" element={<Feed />} />
             <Route path="/profile/:id" element={<UserProfile/>}/>

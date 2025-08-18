@@ -5,12 +5,23 @@ import User from '../models/user.js';
 import {uploadOnCloudinary,Cloudinary} from '../utils/cloudinary.js';
 import generateAccessAndRefreshTokens from '../utils/token.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import sendVerificationEmail from '../utils/sendEmail.js';
 
 const signUp = asyncHandle(async (req, res) => {
     const { admNo, email, password, discipline, branch, firstName, lastName } = req.body;
     if (!admNo || !email || !password || !discipline || !branch || !firstName) {
         throw new ApiError(400, 'all fields are required');
     }
+
+    if(!email.endsWith('@iitism.ac.in')){
+        throw new ApiError(400, 'IIT ISM email required');
+    }
+
+
+    const verificationToken= crypto.randomBytes(32).toString('hex');
+
+
     const userExist = await User.findOne({ email });
     if (userExist) {
         throw new ApiError(400, 'user already exist');
@@ -33,16 +44,19 @@ const signUp = asyncHandle(async (req, res) => {
         branch,
         firstName,
         lastName,
-        profilePic: profilePicUrl
-    })
+        profilePic: profilePicUrl,
+        verificationToken
+    });
 
     const createdUser = await User.findById(newUser._id).select("-password -refreshToken");
     if (!createdUser) {
         throw new ApiError(500, 'User creation failed');
     }
 
+    await sendVerificationEmail(newUser.email, newUser.verificationToken);
+
     return res.status(201).json(
-        new ApiResponse(201, createdUser, "User registered successfully")
+        new ApiResponse(201, {}, "Registration successful! Please check your email to verify your account.")
     );
 });
 
@@ -57,8 +71,13 @@ const login = asyncHandle(async (req, res) => {
             { admNo: { $regex: new RegExp(`^${emailOrAdmNo}$`, 'i') } }
         ]
     });
+
     if (!user) {
         throw new ApiError(404, 'User not found');
+    }
+
+    if(!user.isVerified){
+        throw new ApiError(403, 'Please verify your email address before logging in.');
     }
 
     const isMatch = await user.isPasswordMatch(password);
@@ -184,11 +203,42 @@ const refreshAccessToken = asyncHandle(async (req, res) => {
     );
 });
 
+const verifyEmail=asyncHandle(async(req,res)=>{
+    const {token}=req.params;
+
+    const user = await User.findOne({verificationToken:token});
+
+    if (!user) {
+        throw new ApiError(404, "Invalid or expired verification token.");
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined; // Clear the token so it can't be used again
+    await user.save();
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
+
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+
+    const options = {
+        httpOnly: true,
+        secure: true, 
+        sameSite: 'none'
+    };
+    
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200, loggedInUser, "Email verified successfully! You are now logged in."));
+});
+
 export {
     signUp,
     login,
     currentUser,
     logout,
     userProfile,
-    refreshAccessToken
+    refreshAccessToken,
+    verifyEmail
 };

@@ -78,13 +78,9 @@ function SignUp() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      await login({
-        emailOrAdmNo: formData.email,
-        password: formData.password
-      });
 
       setLoading(false);
-      navigate('/feed'); // Navigate to the main feed after successful login
+      navigate('/check-your-email');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Something went wrong');
       setLoading(false);
