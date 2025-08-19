@@ -21,6 +21,7 @@ function App() {
         await apiClient.get('/health');
       }catch(e){
         console.log('finished pinging backend');
+        
       }
     };
     wakeUpServer();
