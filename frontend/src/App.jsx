@@ -11,6 +11,7 @@ import apiClient from './api/axios';
 import UserProfile from './pages/UserProfile';
 import CheckEmail from './pages/CheckEmail';
 import VerifyEmail from './pages/VerifyEmail';
+import ConfessionPage from './pages/ConfessionPage';
 
 function App() {
 
@@ -37,11 +38,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/check-your-email" element={<CheckEmail/>}/>
-          <Route path="/verify-email/:token" element={<VerifyEmail/>} />
+          <Route path="/verify-email/:token" element={<VerifyEmail/>}/>
 
           <Route element={<ProtectedRoute />}>
             <Route path="/feed" element={<Feed />} />
             <Route path="/profile/:id" element={<UserProfile/>}/>
+            <Route path="/confessions" element={<ConfessionPage/>}/>
           </Route>
         </Routes>
       </main>

@@ -46,7 +46,7 @@ function PostCard({ post, onDelete, onEdit }) {
     }
 
     try {
-      await apiClient.put(`/posts/${post._id}/like`);
+      await apiClient.post(`/posts/${post._id}/like`);
     } catch (error) {
       console.error("Failed to update like status:", error);
       setLikes(originalLikes);

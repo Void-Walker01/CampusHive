@@ -26,10 +26,12 @@ app.get('/api/v1/health',(req,res)=>{
 import userRoutes from './routes/userRoute.js';
 import postRoutes from './routes/postRoute.js';
 import commentRoutes from './routes/commentRoute.js';
+import confessionRoutes from './routes/confessionRoute.js';
 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/confessions', confessionRoutes);
 app.use(errorHandler);
 
 
