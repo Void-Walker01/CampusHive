@@ -47,7 +47,7 @@ function Header(){
             <>
               <NavLink to="/feed" className="text-gray-300 hover:text-white transition" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Explore</NavLink>
               
-              <NavLink to="/confessions" className="text-gray-300 hover:text-white transition" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Anonymous🎭</NavLink>
+              <NavLink to="/anonymous" className="text-gray-300 hover:text-white transition" style={({ isActive }) => isActive ? activeLinkStyle : undefined}>Anonymous🎭</NavLink>
               
               <NavLink to={`/profile/${currentUser._id}`} className="flex items-center gap-2">
                 <img src={currentUser.profilePic || `https://ui-avatars.com/api/?name=${currentUser.firstName}+${currentUser.lastName}&background=4f46e5&color=fff`} alt="profile" className="h-9 w-9 rounded-full object-cover border-2 border-transparent hover:border-purple-500 transition" />
@@ -76,7 +76,7 @@ function Header(){
               <>
                 <NavLink to="/feed" className="text-gray-300 hover:text-white transition text-lg" style={({ isActive }) => isActive ? activeLinkStyle : undefined} onClick={handleLinkClick}>Explore</NavLink>
                 
-                <NavLink to="/confessions" className="text-gray-300 hover:text-white transition text-lg" style={({ isActive }) => isActive ? activeLinkStyle : undefined} onClick={handleLinkClick}>Anonymous🎭</NavLink>
+                <NavLink to="/anonymous" className="text-gray-300 hover:text-white transition text-lg" style={({ isActive }) => isActive ? activeLinkStyle : undefined} onClick={handleLinkClick}>Anonymous🎭</NavLink>
                 
                 <NavLink to={`/profile/${currentUser._id}`} className="text-gray-300 hover:text-white transition text-lg" style={({ isActive }) => isActive ? activeLinkStyle : undefined} onClick={handleLinkClick}>My Profile</NavLink>
                 <button onClick={handleLogout} className="flex items-center gap-2 text-gray-300 hover:text-white transition text-lg"><FiLogOut /><span>Logout</span></button>

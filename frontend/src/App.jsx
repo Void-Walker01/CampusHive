@@ -11,7 +11,7 @@ import apiClient from './api/axios';
 import UserProfile from './pages/UserProfile';
 import CheckEmail from './pages/CheckEmail';
 import VerifyEmail from './pages/VerifyEmail';
-import ConfessionPage from './pages/ConfessionPage';
+import AnonymousPage from './pages/AnonymousPage';
 
 function App() {
 
@@ -43,7 +43,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/feed" element={<Feed />} />
             <Route path="/profile/:id" element={<UserProfile/>}/>
-            <Route path="/confessions" element={<ConfessionPage/>}/>
+            <Route path="/anonymous" element={<AnonymousPage/>}/>
           </Route>
         </Routes>
       </main>
