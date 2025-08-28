@@ -39,7 +39,7 @@ function Hero() {
         {/* "Coming Soon" Section remains unchanged */}
         <div className="mt-8">
           <p className="text-l text-gray-400 transition-all hover:text-gray-200">
-            <span className="font-semibold text-blue-400">Coming soon:</span> Real-time Chat, Interactive Polls, Anonymous Feeds & more! ✨
+            <span className="font-semibold text-blue-400">Coming soon:</span> Real-time Chat & more! ✨
           </p>
         </div>
         
