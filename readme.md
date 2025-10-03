@@ -34,6 +34,7 @@
 ## 🎯 About The Project
 
 **CampusHive** is a full-stack web application built to create a unified digital ecosystem for the students of IIT (ISM) Dhanbad. Our mission is to bridge the gap between students, campus clubs, and events by providing a single, intuitive platform. From real-time chat and interactive feeds to a centralized hub for all campus happenings, CampusHive is designed to be the ultimate one-stop-shop for campus life.
+(Note: the free version of vercel and render can delay opening of project on deployed link you may see a blank white page wait for sometime it will open)
 
 ---
 
@@ -144,6 +145,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information. (You'
 
 ## 🧑‍💻 Maintainer
 
-**[Rohit Guleria]** — Feel free to reach out!
+**Rohit Guleria** — Feel free to reach out!
 
-Project Link: [https://github.com/RohitGuleria/CampusHive](https://campus-hive-rho.vercel.app/)
+Project Link: [Live Demo](https://campus-hive-rho.vercel.app/)
