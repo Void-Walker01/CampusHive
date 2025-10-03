@@ -1,22 +1,33 @@
-import nodemailer from 'nodemailer';
-import sgTransport from 'nodemailer-sendgrid-transport';
+// backend/utils/sendEmail.js
+
+import sgMail from '@sendgrid/mail';
+
+// Set the API key from your .env file
+const apiKey = process.env.SENDGRID_API;
+
+if (!apiKey) {
+    console.error("SENDGRID_API_KEY is not set in the environment variables.");
+} else {
+    sgMail.setApiKey(apiKey);
+}
 
 const sendVerificationEmail = async (userEmail, verificationToken) => {
-    // 1. Configure Nodemailer to use SendGrid
-    const transporter = nodemailer.createTransport(sgTransport({
-        auth: {
-            api_key: process.env.SENDGRID_API,
-        }
-    }));
+    // Ensure the API key was set before trying to send
+    if (!apiKey) {
+        console.error("Cannot send email: SendGrid API Key is missing.");
+        // Optionally, throw an error to be handled by your async wrapper
+        // throw new Error("Email service is not configured.");
+        return; 
+    }
 
-    const frontendUrl=process.env.CORS_ORIGIN || 'http://localhost:5173';
+    const frontendUrl = process.env.CORS_ORIGIN || 'http://localhost:5173';
     const verificationUrl = `${frontendUrl}/verify-email/${verificationToken}`;
 
-    const mailOptions = {
-        from: 'whyimade5@gmail.com',
+    const msg = {
         to: userEmail,
+        // IMPORTANT: This 'from' email MUST be a verified sender in your SendGrid account.
+        from: 'whyimade5@gmail.com', 
         subject: 'Verify Your Email for CampusHive',
-
         html: `
             <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
                 <h2>Welcome to CampusHive!</h2>
@@ -29,11 +40,14 @@ const sendVerificationEmail = async (userEmail, verificationToken) => {
         `
     };
 
-    try{
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully');
-    }catch(err){
-        console.error('Error sending email:', err);
+    try {
+        await sgMail.send(msg);
+        console.log(`Verification email sent successfully to ${userEmail}`);
+    } catch (error) {
+        console.error('Error sending verification email:', error);
+        if (error.response) {
+            console.error(error.response.body);
+        }
     }
 };
 

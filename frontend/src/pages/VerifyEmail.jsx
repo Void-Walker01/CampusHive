@@ -17,8 +17,7 @@ const VerifyEmail=()=>{
         }
 
         try{
-            const response = await apiClient.get(`/user/verify-email/${token}`);
-
+            const response = await apiClient.post(`/user/verify-email/${token}`);
             const userData = response.data.data;
             setUser(userData);
             setStatus('Success! You are now logged in. Redirecting to the feed...');
