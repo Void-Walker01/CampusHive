@@ -11,6 +11,6 @@ router.get('/currentuser', verifyJWT, currentUser);
 router.post('/logout', verifyJWT, logout);
 router.get('/:id', verifyJWT, userProfile);
 router.post('/refresh', refreshAccessToken);
-router.get('/verify-email/:token',verifyEmail);
+router.post('/verify-email/:token',verifyEmail);
 
 export default router;
