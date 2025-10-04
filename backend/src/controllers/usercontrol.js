@@ -233,6 +233,30 @@ const verifyEmail=asyncHandle(async(req,res)=>{
         .json(new ApiResponse(200, loggedInUser, "Email verified successfully! You are now logged in."));
 });
 
+const searchUser=asyncHandle(async(req,res)=>{
+    const {q}=req.query;
+    if(!q){
+        throw new ApiError(400,"Query string is required");
+    }
+
+
+    const users=await User.find({
+        $or:[
+            {firstName:{$regex: q, $options: 'i'}},
+            {lastName:{$regex: q, $options: 'i'}},
+            {admNo:{$regex: q, $options: 'i'}},
+        ]
+    }).select('-password -refreshToken');
+
+    return res
+    .status(200)
+    .json(new ApiResponse(
+        200,
+        users,
+        "User search completed successfully"
+    ));
+});
+
 export {
     signUp,
     login,
@@ -240,5 +264,6 @@ export {
     logout,
     userProfile,
     refreshAccessToken,
-    verifyEmail
+    verifyEmail,
+    searchUser
 };
