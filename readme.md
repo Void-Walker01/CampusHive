@@ -45,10 +45,8 @@ The project is broken down into several key modules, each with a specific focus:
 | Feature Category          | Description                                                                                              | Status             |
 | :------------------------ | :------------------------------------------------------------------------------------------------------- | :----------------- |
 | **🔐 Core & Authentication** | Scalable Node.js backend, secure JWT authentication,  | ✅ **Complete** |
-| **💬 Community Engagement** | Real-time chat, interactive feeds, profile discovery, anonymous confessions, and fun polls.             | 🚧 **In Progress** |
-| **🎉 Event & Club Hub** | A centralized dashboard for discovering events and clubs, plus media uploads for posters and images.      | 🛠️ **Upcoming** |
-| **📊 Admin & Analytics** | A powerful admin dashboard to manage users, monitor activity, and view platform analytics.                | 🛠️ **Upcoming** |
-| **🔔 Real-time Notifications** | Instant alerts for messages, event updates, and feed activity so you never miss a beat.                   | 🛠️ **Upcoming** |
+| **💬 Community Engagement** | interactive feeds, profile discovery, anonymous confessions, and fun polls.             | ✅ **Complete** |
+| **🔔 Real-time** | Real-time chat,     Instant alerts for messages, event updates, and feed activity so you never miss a beat.                  | 🚧 **In Progress** |
 
 ---
 
