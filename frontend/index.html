@@ -11,7 +11,6 @@
 
     <style>
       body {
-        /* Set the background on the body so there's no flash of white */
         background-color: #0d1117;
       }
       
@@ -24,15 +23,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        /* Use the same background as the body */
         background-color: #0d1117; 
         z-index: 9999;
-        transition: opacity 0.5s ease; /* Add a fade-out effect */
+        transition: opacity 0.5s ease;
+        /* ADD THIS to stack items vertically */
+        flex-direction: column; 
       }
 
       .preloader.hidden {
         opacity: 0;
-        /* Hide it from screen readers and pointer events after transition */
         visibility: hidden; 
       }
 
@@ -45,6 +44,14 @@
         animation: spin 1s linear infinite;
       }
 
+      /* ADD THIS CSS for the new text */
+      .preloader-text {
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 20px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+      }
+
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -55,19 +62,12 @@
 
     <div class="preloader">
       <div class="spinner"></div>
+      <p class="preloader-text">Waking up the server... please wait 😴🚀</p>
     </div>
 
     <div id="root"></div>
     
     <script type="module" src="/src/main.jsx"></script>
-
-    <script>
-      window.addEventListener('load', () => {
-        const preloader = document.querySelector('.preloader');
-        if (preloader) {
-          preloader.classList.add('hidden');
-        }
-      });
-    </script>
+    
   </body>
 </html>
