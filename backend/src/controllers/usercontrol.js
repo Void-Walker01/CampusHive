@@ -151,6 +151,7 @@ const userProfile=asyncHandle(async(req,res)=>{
 
     if(!user){
         throw new ApiError (404,"User not found");
+        
     }
 
     return res

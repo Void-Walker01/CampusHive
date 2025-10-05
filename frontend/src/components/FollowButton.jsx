@@ -15,6 +15,7 @@ const FollowButton = ({ profileUser, onFollowStateChange }) => {
             setIsFollower(profileUser.following.includes(currentUser._id));
         }
     }, [profileUser, currentUser]);
+    
 
     const handleFollowToggle = async () => {
         setIsLoading(true);
