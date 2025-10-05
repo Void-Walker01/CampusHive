@@ -147,7 +147,7 @@ const logout = asyncHandle(async (req, res) => {
 
 const userProfile=asyncHandle(async(req,res)=>{
     const {id}=req.params;
-    const user=await User.findById(id).select('-password');
+    const user=await User.findById(id).select('-password -refreshToken');
 
     if(!user){
         throw new ApiError (404,"User not found");
@@ -257,6 +257,72 @@ const searchUser=asyncHandle(async(req,res)=>{
     ));
 });
 
+const followUser = asyncHandle(async (req, res) => {
+    const { id: userToFollowId } = req.params;
+    const currentUserId = req.user._id;
+
+    if (currentUserId.toString() === userToFollowId) {
+        throw new ApiError(400, "You cannot follow yourself");
+    }
+
+    const userToFollow = await User.findById(userToFollowId);
+    if (!userToFollow) {
+        throw new ApiError(404, "User to follow not found");
+    }
+
+    await Promise.all([
+        User.findByIdAndUpdate(
+            currentUserId,
+            { $addToSet: { following: userToFollowId } }
+        ),
+        User.findByIdAndUpdate(
+            userToFollowId,
+            { $addToSet: { followers: currentUserId } }
+        )
+    ]);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {},
+            `You are now following ${userToFollow.firstName}${userToFollow.lastName ? ` ${userToFollow.lastName}` : ''}`
+        ));
+});
+
+const unfollowUser = asyncHandle(async (req, res) => {
+    const { id: userToUnfollowId } = req.params;
+    const currentUserId = req.user._id;
+
+    if (currentUserId.toString() === userToUnfollowId) {
+        throw new ApiError(400, "You cannot unfollow yourself");
+    }
+
+    const userToUnfollow = await User.findById(userToUnfollowId);
+    if (!userToUnfollow) {
+        throw new ApiError(404, "User to unfollow not found");
+    }
+
+    await Promise.all([
+        User.findByIdAndUpdate(
+            currentUserId,
+            { $pull: { following: userToUnfollowId } }
+        ),
+        User.findByIdAndUpdate(
+            userToUnfollowId,
+            { $pull: { followers: currentUserId } }
+        )
+    ]);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {},
+            `You have unfollowed ${userToUnfollow.firstName}${userToUnfollow.lastName ? ` ${userToUnfollow.lastName}` : ''}`
+        ));
+});
+
 export {
     signUp,
     login,
@@ -265,5 +331,7 @@ export {
     userProfile,
     refreshAccessToken,
     verifyEmail,
-    searchUser
+    searchUser,
+    followUser,
+    unfollowUser
 };

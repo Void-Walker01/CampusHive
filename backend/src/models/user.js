@@ -50,6 +50,16 @@ const userSchema = new mongoose.Schema({
   },
   verificationToken:{
     type:String,
+  },
+  followers:{
+    type:[mongoose.Schema.Types.ObjectId],
+    ref:'User',
+    default:[]
+  },
+  following:{
+    type:[mongoose.Schema.Types.ObjectId],
+    ref:'User',
+    default:[]
   }
 }, {
   timestamps: true,
